@@ -11,10 +11,4 @@ export default function SetupPage() {
       onOpen()
     }
   }, [onOpen, isOpen]);
-  return (
-    <div className="p-4">
-      {" "}
-      <UserButton afterSignOutUrl="/" />
-    </div>
-  );
 }

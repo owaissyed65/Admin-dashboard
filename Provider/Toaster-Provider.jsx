@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-const { Toaster } = require("react-hot-toast")
+import { Toaster } from "react-hot-toast";
 
-export const ToastProvider = () =>{
-    return <Toaster />
-}
+export const ToastProvider = () => {
+  return <Toaster position="top-center" reverseOrder={true} />;
+};
