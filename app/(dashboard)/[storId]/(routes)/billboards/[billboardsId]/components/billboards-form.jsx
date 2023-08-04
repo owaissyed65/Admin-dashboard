@@ -49,7 +49,6 @@ const BillBoardsforms = ({ initialData }) => {
     },
   });
   const onSubmit = async (data) => {
-    console.log(data)
     try {
       setLoading(true);
       if (initialData) {
@@ -57,6 +56,7 @@ const BillBoardsforms = ({ initialData }) => {
           `/api/${params.storId}/billboards/${params.billboardsId}`,
           data
         );
+        router.refresh();
       } else {
         await axios.post(`/api/${params.storId}/billboards`, data);
         console.log('hello')
@@ -77,8 +77,8 @@ const BillBoardsforms = ({ initialData }) => {
       await axios.delete(
         `/api/${params.storId}/billboards/${params.billboardsId}`
       );
-      router.push("/");
       toast.success("Store Deleted");
+      router.push(`/${params.storId}/billboards`)
     } catch (error) {
       toast.error(
         "Make Sure you removed all categories using this billboards first."
