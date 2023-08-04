@@ -23,6 +23,7 @@ model BillBoard{
   storeId     String
   store       store @relation("StoreToBillBoard",fields: [storeId],references: [id])
   label       String
+  imageUrl    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
