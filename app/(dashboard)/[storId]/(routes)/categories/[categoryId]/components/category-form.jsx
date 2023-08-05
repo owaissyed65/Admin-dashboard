@@ -9,8 +9,14 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import Heading from "@/components/ui/heading";
-import ImageUploader from "@/components/ui/image-uploader";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import useOrigin from "@/hooks/use-Origin";
 
@@ -23,29 +29,25 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
 
-const BillBoardsforms = ({ initialData }) => {
+const categoryForm = ({ initialData, billboard }) => {
   const origin = useOrigin();
   const params = useParams();
   const router = useRouter();
-  const title = initialData ? "Edit BillBoard" : "Create BillBoard";
-  const desc = initialData ? "Edit a BillBoard" : "Add a new BillBoard";
-  const toastUpdated = initialData
-    ? "BillBoard Updated."
-    : "BillBoard Created.";
+  const title = initialData ? "Edit Category" : "Create Category";
+  const desc = initialData ? "Edit a Category" : "Add a new Category";
+  const toastUpdated = initialData ? "Category Updated." : "Category Created.";
   const action = initialData ? "Save Changes" : "Create";
   const formSchema = z.object({
-    label: z.string().min(2, {
-      message: "Use minimum 2 word",
-    }),
-    imageUrl: z.string().min(2),
+    name: z.string().min(2),
+    billboardId: z.string().min(2),
   });
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      label: "",
-      imageUrl: "",
+      name: "",
+      billboardId: "",
     },
   });
   const onSubmit = async (data) => {
@@ -53,16 +55,17 @@ const BillBoardsforms = ({ initialData }) => {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storId}/billboards/${params.billboardsId}`,
+          `/api/${params.storId}/categories/${params.categoryId}`,
           data
         );
         router.refresh();
       } else {
-        await axios.post(`/api/${params.storId}/billboards`, data);
+        await axios.post(`/api/${params.storId}/categories`, data);
+        
       }
       router.refresh();
       toast.success(toastUpdated);
-      router.push(`/${params.storId}/billboards`)
+      router.push(`/${params.storId}/categories`);
     } catch (error) {
       toast.error("Internal server Error");
       console.error(error);
@@ -74,13 +77,14 @@ const BillBoardsforms = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storId}/billboards/${params.billboardsId}`
+        `/api/${params.storId}/categories/${params.categoryId}`
       );
-      toast.success("Billboard Deleted");
-      router.push(`/${params.storId}/billboards`)
+      toast.success("Category Deleted");
+      router.refresh();
+      router.push(`/${params.storId}/categories`);
     } catch (error) {
       toast.error(
-        "Make Sure you removed all categories using this billboards first."
+        "Make Sure you removed all products using this category first."
       );
     } finally {
       setLoading(false);
@@ -118,39 +122,52 @@ const BillBoardsforms = ({ initialData }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="mt-8 w-full px-6 mb-3"
         >
-          <FormField
-            control={form.control}
-            name="imageUrl"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Background Image</FormLabel>
-                  <FormControl>
-                    <ImageUploader
-                      value={field?.value ? [field.value] : []}
-                      onChange={(url) => field.onChange(url)}
-                      onRemove={() => field.onChange("")}
-                    />
-                  </FormControl>
-                </FormItem>
-              );
-            }}
-          />
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="label"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="BillBoard Label"
+                      placeholder="Category Name"
                       {...field}
                       className="w-auto"
                     />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="billboardId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Billboard</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    disabled={loading}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a billboard"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {billboard?.map((data) => (
+                        <SelectItem key={data?.id} value={data?.id}>
+                          {data.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />
@@ -165,4 +182,4 @@ const BillBoardsforms = ({ initialData }) => {
   );
 };
 
-export default BillBoardsforms;
+export default categoryForm;

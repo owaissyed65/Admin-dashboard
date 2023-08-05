@@ -8,13 +8,12 @@ export async function GET(req, { params }) {
     const { userId } = auth();
 
     if (!params.billboardsId) {
-      return new NextResponse("Store-Id is required", { status: 400 });
+      return new NextResponse("BillBoard-Id is required", { status: 400 });
     }
 
     const BillBoards = await prisma.BillBoard.findUnique({
       where: {
         id: params.storeId,
-        userId,
       },
     });
     return NextResponse.json(BillBoards);
@@ -90,7 +89,7 @@ export async function DELETE(req, { params }) {
     }
 
     if (!params.billboardsId) {
-      return new NextResponse("Store-Id is required", { status: 400 });
+      return new NextResponse("BillBoard-Id is required", { status: 400 });
     }
 
     const storeByUserId = await prisma.store.findFirst({

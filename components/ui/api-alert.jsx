@@ -24,9 +24,9 @@ const ApiAlert = ({ title, desc, variant }) => {
   return (
     <Alert>
       <Server className="h-4 w-4" />
-      <AlertTitle className="flex items-center flex-col md:flex-row gap-x-2 gap-2 md:gap-0">
+      <AlertTitle className="flex items-center flex-col md:flex-row gap-x-2 gap-2 md:gap-0 ">
         {title}
-        <Badge variant={VariantMap[variant]}>{textMap[variant]}</Badge>
+        <Badge variant={VariantMap[variant]} className={'ml-2'}>{textMap[variant]}</Badge>
       </AlertTitle>
       <AlertDescription className="mt-4 flex items-center justify-between flex-col gap-2 md:flex-row md:gap-0 ">
         <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold break-all">

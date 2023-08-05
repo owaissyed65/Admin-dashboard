@@ -16,12 +16,12 @@ const Client = ({ data }) => {
     <>
       <div className="flex justify-between items-center">
         <Heading
-          title={`Billboards (${data?.length})`}
-          desc={"Manage billBoards for you Store"}
+          title={`Categories (${data?.length})`}
+          desc={"Manage categories for you Store"}
         />
         <Button
           onClick={() => {
-            router.push(`/${params.storId}/billboards/new`);
+            router.push(`/${params.storId}/categories/new`);
           }}
         >
           {" "}
@@ -30,10 +30,10 @@ const Client = ({ data }) => {
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="label" columns={columns} data={data} />
+      <DataTable searchKey="name" columns={columns} data={data} />
       <Separator />
       <Heading title="Api" desc="Call for api"/>
-      <ApiList entityName={'billboards'} entityNameId={'billboardsId'}/>
+      <ApiList entityName={'categories'} entityNameId={'categories'}/>
     </>
   );
 };

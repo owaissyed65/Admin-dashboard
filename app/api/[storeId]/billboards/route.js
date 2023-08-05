@@ -19,13 +19,13 @@ export async function POST(req, { params }) {
       return new NextResponse("Store Id is required", { status: 400 });
     }
     const storeByUserId = await prismadb.store.findFirst({
-        where:{
-            id:params.storeId,
-            userId
-        }
-    })
-    if(!storeByUserId){
-        return new NextResponse("Unauthorized", { status: 404 });
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    });
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 404 });
     }
     const BillBoards = await prismadb.BillBoard.create({
       data: {
@@ -48,12 +48,12 @@ export async function GET(req, { params }) {
     }
     const BillBoards = await prismadb.BillBoard.findMany({
       where: {
-        storeId : params.storeId
+        storeId: params.storeId,
       },
     });
     return NextResponse.json(BillBoards);
   } catch (error) {
-    console.log("[BillBoard_POST]", error);
+    console.log("[BillBoard_GET]", error);
     throw new Error(error);
   }
 }

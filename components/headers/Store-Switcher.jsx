@@ -65,7 +65,7 @@ export default function StoreSwitcher({ className, items = [] }) {
                   onSelect={() => {
                     onStoreSelect(store);
                   }}
-                  className="text-sm"
+                  className={cn(currentStore?.value === store?.value ? 'bg-blue-50 cursor-not-allowed':'bg-transparent cursor-pointer')}
                 >
                   <Store className="mr-2 h-4 w-4" />
                   {store?.label}

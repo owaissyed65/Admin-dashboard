@@ -3,27 +3,31 @@ import React from "react";
 import Client from "./components/Client";
 import prisma from "@/lib/prismadb";
 
-const BillboardsPage = async ({ params }) => {
-  const billBoards = await prisma.BillBoard.findMany({
+const CategoriesPage = async ({ params }) => {
+  const categories = await prisma.category.findMany({
     where: {
       storeId: params.storId,
     },
-    orderBy:{
-      updatedAt:'desc'
-    }
+    include: {
+      billboard: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
-  const formattedBillBoards = billBoards?.map((value) => ({
+  const formattedCategories = categories?.map((value) => ({
     id: value.id,
-    label: value.label,
+    name: value.name,
+    billboardLabel: value.billboard.label,
     createdAt: format(value.createdAt, "MMMM do, yyyy"),
   }));
   return (
     <div className="flex flex-col">
       <div className="space-y-4 flex-1 p-8 pt-6">
-        <Client data={formattedBillBoards} />
+        <Client data={formattedCategories} />
       </div>
     </div>
   );
 };
 
-export default BillboardsPage;
+export default CategoriesPage;
