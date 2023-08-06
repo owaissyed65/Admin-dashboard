@@ -24,28 +24,47 @@ const MainNav = ({ className, ...props }) => {
       active: pathName === `/${storId}/categories`,
     },
     {
+      href: `/${storId}/sizes`,
+      label: "Sizes",
+      active: pathName === `/${storId}/sizes`,
+    },
+    {
       href: `/${storId}/settings`,
       label: "Settings",
       active: pathName === `/${storId}/settings`,
     },
   ];
   return (
-    <div
-      className={cn(
-        "flex items-start justify-center space-x-4 lg:space-x-6",
-        className
-      )}
-    >
-      {routes.map((val) => (
-        <Link
-        href={val.href}
-        key={val.href}
-        className={cn('text-sm transition-colors hover:text-primary',
-        val.active?'text-black dark:text-white':'text-muted-foreground')}
-        >
-            {val.label}
-        </Link>
-      ))}
+    <div className={cn("flex items-start justify-center ", className)}>
+      {props.mobile
+        ? routes.map((val) => (
+            <Link
+              href={val.href}
+              className={cn(
+                "text-sm transition-colors hover:text-primary",
+                val.active
+                  ? "text-black dark:text-white"
+                  : "text-muted-foreground"
+              )}
+                onClick={()=>props.setOpen(false)}
+            >
+              {val.label}
+            </Link>
+          ))
+        : routes.map((val) => (
+            <Link
+              href={val.href}
+              key={val.href}
+              className={cn(
+                "text-sm transition-colors hover:text-primary",
+                val.active
+                  ? "text-black dark:text-white"
+                  : "text-muted-foreground"
+              )}
+            >
+              {val.label}
+            </Link>
+          ))}
     </div>
   );
 };

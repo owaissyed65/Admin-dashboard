@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ModeToggle() {
+export function ModeToggle({ ...props }) {
   const { setTheme } = useTheme();
 
   return (
@@ -25,11 +25,25 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Sun className="h-4 w-4 mr-2"/>
+        <DropdownMenuItem
+          onClick={() => {
+            setTheme("light");
+            if (props.mobile) {
+              props.setOpen(false);
+            }
+          }}
+        >
+          <Sun className="h-4 w-4 mr-2" />
           Sun
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem
+          onClick={() => {
+            setTheme("dark");
+            if (props.mobile) {
+              props.setOpen(false);
+            }
+          }}
+        >
           <MoonIcon className="mr-2 h-4 w-4" />
           Moon
         </DropdownMenuItem>
