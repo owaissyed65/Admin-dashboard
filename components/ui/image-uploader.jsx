@@ -15,7 +15,6 @@ const ImageUploader = ({ disabled, onChange, onRemove, value = [] }) => {
   if (!mounted) {
     return null;
   }
-  console.log(value)
   const onUpload = (result) => {
     onChange(result.info.secure_url)
   };

@@ -1,9 +1,11 @@
 "use client";
 import AlertModal from "@/components/modal/Alert-Modal";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -11,6 +13,13 @@ import {
 import Heading from "@/components/ui/heading";
 import ImageUploader from "@/components/ui/image-uploader";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import useOrigin from "@/hooks/use-Origin";
 
@@ -23,7 +32,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
 
-const ProductForms = ({ initialData }) => {
+const ProductForms = ({ initialData, categories, colors, sizes }) => {
   const origin = useOrigin();
   const params = useParams();
   const router = useRouter();
@@ -66,16 +75,16 @@ const ProductForms = ({ initialData }) => {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storId}/billboards/${params.billboardsId}`,
+          `/api/${params.storId}/products/${params.productId}`,
           data
         );
         router.refresh();
       } else {
-        await axios.post(`/api/${params.storId}/billboards`, data);
+        await axios.post(`/api/${params.storId}/products`, data);
       }
       router.refresh();
       toast.success(toastUpdated);
-      router.push(`/${params.storId}/billboards`);
+      router.push(`/${params.storId}/products`);
     } catch (error) {
       toast.error("Internal server Error");
       console.error(error);
@@ -87,13 +96,13 @@ const ProductForms = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storId}/billboards/${params.billboardsId}`
+        `/api/${params.storId}/products/${params.productId}`
       );
-      toast.success("Billboard Deleted");
-      router.push(`/${params.storId}/billboards`);
+      toast.success("Product Deleted");
+      router.push(`/${params.storId}/products`);
     } catch (error) {
       toast.error(
-        "Make Sure you removed all categories using this billboards first."
+        "Something went wrong, if issue persists so please contact to developer"
       );
     } finally {
       setLoading(false);
@@ -158,18 +167,167 @@ const ProductForms = ({ initialData }) => {
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="label"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="BillBoard Label"
+                      placeholder="Product Name..."
                       {...field}
-                      className="w-auto"
                     />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      type="number"
+                      placeholder="9.99"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    disabled={loading}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a Category"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories?.map((data) => (
+                        <SelectItem key={data?.id} value={data?.id}>
+                          {data.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sizeId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    disabled={loading}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a Size"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {sizes?.map((data) => (
+                        <SelectItem key={data?.id} value={data?.id}>
+                          {data.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="colorId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    disabled={loading}
+                    defaultValue={field.value}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a colors"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {colors?.map((data) => (
+                        <SelectItem key={data?.id} value={data?.id}>
+                          {data.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isFeatured"
+              render={({ field }) => (
+                <FormItem className="flex items-start flex-row space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                       checked={field.value}
+                       onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Featured</FormLabel>
+                    <FormDescription>
+                      This product will appear on the product Page
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isArchived"
+              render={({ field }) => (
+                <FormItem className="flex items-start flex-row space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                       checked={field.value}
+                       onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Archived</FormLabel>
+                    <FormDescription>
+                      This product will not appear on the any on the store
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />

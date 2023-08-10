@@ -15,7 +15,7 @@ const Client = ({ data }) => {
     <>
       <div className="flex justify-between items-center">
         <Heading
-          title={`Product${data?.length>0?'s':''} (${data?.length})`}
+          title={`Product${data?.length > 0 ? "s" : ""} (${data?.length})`}
           desc={"Manage products for you Store"}
         />
         <Button
@@ -29,10 +29,10 @@ const Client = ({ data }) => {
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="label" columns={columns} data={data} />
+      <DataTable searchKey="name" columns={columns} data={data} />
       <Separator />
-      <Heading title="Api" desc="Call for api"/>
-      <ApiList entityName={'products'} entityNameId={'productId'}/>
+      <Heading title="Api" desc="Call for api" />
+      <ApiList entityName={"products"} entityNameId={"productId"} />
     </>
   );
 };

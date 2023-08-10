@@ -2,7 +2,6 @@ import prisma from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-
 export async function GET(req, { params }) {
   try {
     const { userId } = auth();
@@ -13,7 +12,7 @@ export async function GET(req, { params }) {
 
     const BillBoards = await prisma.BillBoard.findUnique({
       where: {
-        id: params.storeId,
+        id: params.billboardsId,
       },
     });
     return NextResponse.json(BillBoards);
@@ -23,11 +22,10 @@ export async function GET(req, { params }) {
   }
 }
 
-
 export async function PATCH(req, { params }) {
   try {
     const { userId } = auth();
-    const { label,imageUrl } = await req.json();
+    const { label, imageUrl } = await req.json();
 
     if (!userId) {
       return new NextResponse("UnAuthorized", { status: 401 });
@@ -94,7 +92,7 @@ export async function DELETE(req, { params }) {
 
     const storeByUserId = await prisma.store.findFirst({
       where: {
-        id: params.storeId
+        id: params.storeId,
       },
     });
 

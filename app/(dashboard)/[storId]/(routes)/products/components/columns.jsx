@@ -8,8 +8,8 @@ export const columns = [
     header: "Name",
   },
   {
-    accessorKey: "isArchieved",
-    header: "Archieved",
+    accessorKey: "isArchived",
+    header: "Archived",
   },
   {
     accessorKey: "isFeatured",
