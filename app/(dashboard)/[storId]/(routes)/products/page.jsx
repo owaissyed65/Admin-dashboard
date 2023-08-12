@@ -18,6 +18,7 @@ const ProductsPage = async ({ params }) => {
       updatedAt: "desc",
     },
   });
+
   const formattedProducts = products?.map((value) => ({
     id: value.id,
     name: value.name,
@@ -29,6 +30,7 @@ const ProductsPage = async ({ params }) => {
     color: value.color.value ,
     createdAt: format(value.createdAt, "MMMM do, yyyy"),
   }));
+  
   return (
     <div className="flex flex-col">
       <div className="space-y-4 flex-1 p-8 pt-6">
