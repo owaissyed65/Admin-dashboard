@@ -46,6 +46,6 @@
     "zustand": "^4.4.0"
   },
   "devDependencies": {
-    "@prisma/client": "^5.1.0"
+    "prisma": "^4.16.1"
   }
 }
